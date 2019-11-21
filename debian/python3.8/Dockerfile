@@ -19,19 +19,17 @@ RUN apt-get install -y build-essential  \
     python3-setuptools \
     wget
 
+# Install Python Packages & Requirements (Done near end to avoid invalidating cache)
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
 # Install Jupyter
-RUN pip install jupyter
-RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension
 
 # Install JupyterLab
-RUN pip install jupyterlab && jupyter serverextension enable --py jupyterlab
+RUN jupyter serverextension enable --py jupyterlab
 
 ENV LANG=C.UTF-8
-
-# Install Python Packages & Requirements (Done near end to avoid invalidating cache)
-# COPY requirements.txt requirements.txt
-# RUN pip install -r requirements.txt
 
 ENV MAIN_PATH=/usr/local/bin/jlab
 ENV LIBS_PATH=${MAIN_PATH}/libs
